@@ -27,7 +27,7 @@ def load_user_data():
             st.session_state.certification_entries = data.get("certification_entries", [])
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 st.set_page_config(page_title="AutoWriter", layout="centered")
 if "details_saved" not in st.session_state:
@@ -55,8 +55,8 @@ with tab1:
     user_data['phone'] = st.text_input("Phone Number", value=user_data.get('phone', ''))
     user_data['email'] = st.text_input("Email", value=user_data.get('email', ''))
     user_data['address'] = st.text_input("Address", value=user_data.get('address', ''))
-    user_data['linkedin'] = st.text_input("LinkedIn URL", value=user_data.get('linkedin', ''))
-    user_data['github'] = st.text_input("GitHub URL", value=user_data.get('github', ''))
+    user_data['linkedin'] = st.text_input("LinkedIn URL (Optional)", value=user_data.get('linkedin', ''))
+    user_data['github'] = st.text_input("GitHub URL (Optional)", value=user_data.get('github', ''))
     user_data['experience'] = st.slider("Years of Experience", 0, 40, user_data.get('experience', 2))
     user_data['skills'] = st.text_area("Key Skills", value=user_data.get('skills', ''))
     user_data['achievements'] = st.text_area("Achievements", value=user_data.get('achievements', ''))
@@ -71,7 +71,7 @@ with tab1:
         with st.expander(f"Education {i+1}"):
             edu['institution'] = st.text_input(f"Institution", value=edu.get("institution", ""), key=f"edu_inst_{i}")
             edu['major'] = st.text_input(f"Major", value=edu.get("major", ""), key=f"edu_major_{i}")
-            edu['date'] = st.text_input(f"Date", value=edu.get("date", ""), key=f"edu_date_{i}")
+            edu['date'] = st.text_input(f"End Date (MM/YYY)", value=edu.get("date", ""), key=f"edu_date_{i}")
             edu['cgpa'] = st.text_input(f"CGPA", value=edu.get("cgpa", ""), key=f"edu_cgpa_{i}")
 
             if st.button(f"Delete Education {i+1}", key=f"delete_edu_{i}"):
@@ -118,7 +118,7 @@ with tab1:
         with st.expander(f"Certification {i+1}"):
             cert['name'] = st.text_input(f"Certificate Name", value=cert.get("name", ""), key=f"cert_name_{i}")
             cert['issuer'] = st.text_input(f"Issued By", value=cert.get("issuer", ""), key=f"cert_issuer_{i}")
-            cert['date'] = st.text_input(f"Issue Date", value=cert.get("date", ""), key=f"cert_date_{i}")
+            cert['date'] = st.text_input(f"Issue Date (MM/YYY)", value=cert.get("date", ""), key=f"cert_date_{i}")
 
             if st.button(f"Delete Certificate {i+1}", key=f"delete_cert_{i}"):
                 del st.session_state.certification_entries[i]
@@ -182,6 +182,9 @@ with tab2:
                 - Professional Summary (3–4 lines tailored to the job)
                 - Key Skills (from user's skills + relevant keywords from JD)
                 - Work Experience (impact-driven, ATS-friendly, tailored)
+                    - Role
+                    - Company
+                    - Date
                 - Projects (highlight relevant tools/tech from JD)
                 - Education
                 - Certifications (if any)
