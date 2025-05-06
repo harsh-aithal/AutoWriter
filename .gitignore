@@ -3,4 +3,4 @@ _pycache_/
 userdata.json
 resume.docx
 .env
-.streamlit/screts.toml
+.streamlit/secrets.toml
