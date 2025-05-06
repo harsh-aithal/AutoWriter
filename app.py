@@ -4,6 +4,7 @@ import openai
 from docx import Document
 import base64
 import json
+from dotenv import load_dotenv
 
 def save_user_data():
     with open("userdata.json", "w") as f:
@@ -25,6 +26,7 @@ def load_user_data():
             st.session_state.project_entries = data.get("project_entries", [])
             st.session_state.certification_entries = data.get("certification_entries", [])
 
+load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 st.set_page_config(page_title="AutoWriter", layout="centered")
@@ -231,16 +233,16 @@ with tab2:
             """
 
             try:
-                response = openai.ChatCompletion.create(
+                response = openai.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[
-                        {"role": "system", "content": "You are an expert resume writer."},
+                        {"role": "system", "content": "You are a helpful assistant."},
                         {"role": "user", "content": prompt}
                     ],
                     temperature=0.5,
                     max_tokens=1200
                 )
-                resume_text = response["choices"][0]["message"]["content"]
+                resume_text = response.choices[0].message.content
 
                 st.subheader("Generated Resume")
                 edited_text = st.text_area("Edit Resume Before Downloading", value=resume_text, height=400)
