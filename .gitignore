@@ -1,0 +1,5 @@
+_pycache_/
+*.pyc
+userdata.json
+resume.docx
+.env
